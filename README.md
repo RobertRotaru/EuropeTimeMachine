@@ -1,5 +1,7 @@
 # Europe Time Machine
 
+React app for viewing the borders of Europe through-out the years.
+
 An interactive map of Europe's political borders from 100 BCE to today. Slide the year, click a
 country to zoom in and read about it, and compare the primary dataset against a second
 historical-borders source.
