@@ -7,14 +7,52 @@ interface InfoPanelProps {
   loading: boolean;
   onClose: () => void;
   subdivisionNote: string | null;
+  expanded: boolean;
+  onToggleExpand: () => void;
 }
 
-export default function InfoPanel({ feature, info, loading, onClose, subdivisionNote }: InfoPanelProps) {
+export default function InfoPanel({
+  feature,
+  info,
+  loading,
+  onClose,
+  subdivisionNote,
+  expanded,
+  onToggleExpand,
+}: InfoPanelProps) {
   if (!feature) return null;
   const props = feature.properties;
+  const title = props.formalName || info?.title || props.name || "Unknown entity";
+
+  if (!expanded) {
+    // Collapsed: a slim edge tab rather than the full panel, so it doesn't cover whatever was
+    // just selected -- this is the default state on phone-sized screens (see App.tsx).
+    return (
+      <button
+        onClick={onToggleExpand}
+        aria-label={`Show details for ${title}`}
+        title={title}
+        className="absolute inset-y-0 right-0 z-20 flex w-11 flex-col items-center gap-2 overflow-hidden border-l border-panel-border bg-panel py-4 text-text-dim hover:text-text"
+      >
+        <span aria-hidden className="text-lg">
+          ‹
+        </span>
+        <span className="min-h-0 flex-1 [writing-mode:vertical-rl] overflow-hidden text-xs text-ellipsis whitespace-nowrap">
+          {title}
+        </span>
+      </button>
+    );
+  }
 
   return (
-    <aside className="absolute inset-y-0 right-0 z-20 w-[360px] max-w-[90vw] overflow-y-auto border-l border-panel-border bg-panel px-5 pt-11 pb-6 shadow-[-8px_0_24px_rgba(0,0,0,0.35)]">
+    <aside className="absolute inset-y-0 right-0 z-20 w-full overflow-y-auto border-l border-panel-border bg-panel px-5 pt-11 pb-6 shadow-[-8px_0_24px_rgba(0,0,0,0.35)] sm:w-[360px] sm:max-w-[90vw]">
+      <button
+        onClick={onToggleExpand}
+        aria-label="Collapse panel"
+        className="absolute top-2.5 right-11 text-xl leading-none text-text-dim hover:text-text"
+      >
+        ›
+      </button>
       <button
         onClick={onClose}
         aria-label="Close panel"
@@ -22,9 +60,7 @@ export default function InfoPanel({ feature, info, loading, onClose, subdivision
       >
         ×
       </button>
-      <h2 className="mb-1 text-xl font-semibold">
-        {props.formalName || info?.title || props.name || "Unknown entity"}
-      </h2>
+      <h2 className="mb-1 text-xl font-semibold">{title}</h2>
       {props.formalName && props.name && props.formalName !== props.name && (
         <p className="mb-1 text-sm text-text-dim">{props.name}</p>
       )}
