@@ -20,6 +20,11 @@ import type {
 } from "./types";
 
 const INFO_PANEL_WIDTH = 360;
+const COLLAPSED_PANEL_WIDTH = 44;
+// Tailwind's default "sm" breakpoint is 640px -- below it, the info panel takes the full
+// screen width when expanded (there's no room for it beside the map), so it starts collapsed
+// on selection instead of immediately covering whatever the user just tapped.
+const MOBILE_MEDIA_QUERY = "(max-width: 639px)";
 // The dataset technically goes back further, but a linear slider spanning that whole range
 // leaves almost no resolution for the last few centuries (where most user interest and data
 // density is). Clamp the practical slider/input floor to 100 BCE; deeper antiquity is a
@@ -41,6 +46,7 @@ export default function App() {
 
   const [selectedFeature, setSelectedFeature] = useState<BorderFeature | null>(null);
   const [selectedSource, setSelectedSource] = useState<"borders" | "disputed" | null>(null);
+  const [panelExpanded, setPanelExpanded] = useState(true);
   const [entityInfo, setEntityInfo] = useState<EntityInfo | null>(null);
   const [entityLoading, setEntityLoading] = useState(false);
   const [subdivisions, setSubdivisions] = useState<SubdivisionFeatureCollection | null>(null);
@@ -108,6 +114,9 @@ export default function App() {
   const handleSelectFeature = useCallback((feature: BorderFeature, source: "borders" | "disputed") => {
     setSelectedFeature(feature);
     setSelectedSource(source);
+    // Start collapsed on phone-sized screens so the panel doesn't immediately cover the
+    // country the user just tapped; desktop has room to show it right away as before.
+    setPanelExpanded(!window.matchMedia(MOBILE_MEDIA_QUERY).matches);
     setEntityInfo(null);
     setEntityLoading(true);
     fetchEntity(feature.properties.wikipedia, feature.properties.wikidata)
@@ -137,6 +146,10 @@ export default function App() {
     setSelectedSource(null);
     setEntityInfo(null);
     setSubdivisions(null);
+  }, []);
+
+  const togglePanelExpanded = useCallback(() => {
+    setPanelExpanded((v) => !v);
   }, []);
 
   if (yearRange === null || year === null) {
@@ -185,7 +198,9 @@ export default function App() {
           }
           onSelectFeature={handleSelectFeature}
           infoPanelOpen={selectedFeature !== null}
-          rightPaddingPx={selectedFeature !== null ? INFO_PANEL_WIDTH : 0}
+          rightPaddingPx={
+            selectedFeature === null ? 0 : panelExpanded ? INFO_PANEL_WIDTH : COLLAPSED_PANEL_WIDTH
+          }
         />
         {bordersLoading && (
           <div className="absolute top-3.5 left-1/2 z-10 -translate-x-1/2 rounded-full border border-panel-border bg-panel/90 px-3.5 py-1.5 text-sm text-text-dim">
@@ -203,6 +218,8 @@ export default function App() {
           loading={entityLoading}
           onClose={closeInfoPanel}
           subdivisionNote={subdivisionNote}
+          expanded={panelExpanded}
+          onToggleExpand={togglePanelExpanded}
         />
       </div>
     </div>
