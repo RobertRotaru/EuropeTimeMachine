@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: europetimemachine-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: free
+    healthCheckPath: /api/years/range
+    envVars:
+      - key: APP_CORS_ALLOWED_ORIGINS
+        sync: false # set in the Render dashboard once the Vercel URL is known -- see README

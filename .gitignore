@@ -1,0 +1,24 @@
+# Dependencies / build output
+node_modules/
+frontend/dist/
+backend/target/
+
+# Raw source downloads for data-pipeline/ -- large (~250MB), not needed at runtime, and not
+# needed again unless the underlying datasets are being refreshed. See backend/data-cache/
+# and the deploy README for what *is* committed (data-cache/processed/).
+backend/data-cache/raw/
+
+# Env files with local overrides
+.env
+.env.local
+frontend/.env
+frontend/.env.local
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.iml
+
+# Claude Code local settings (machine-specific, not part of the app)
+.claude/

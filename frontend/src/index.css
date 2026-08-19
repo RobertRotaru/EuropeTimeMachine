@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a1420;
+  --color-panel: #101d2e;
+  --color-panel-border: #24384f;
+  --color-text: #e7edf3;
+  --color-text-dim: #9fb0c3;
+  --color-accent: #ffb703;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  @apply bg-bg text-text;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+/* maplibre-gl.css ships its own `.maplibregl-map { position: relative }` rule that loads
+   after ours in the bundle and wins on equal specificity, so the map container's sizing is
+   forced with `!important` (via Tailwind's `!` modifier) on the element itself instead. */
+.maplibregl-ctrl-attrib {
+  font-size: 0.7rem;
+}
