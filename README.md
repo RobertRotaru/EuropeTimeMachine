@@ -16,9 +16,9 @@ historical-borders source.
 
 ## Project layout
 
-\```
-backend/         Spring Boot 4.1 (Java 21), Maven. Serves GeoJSON + entity info over REST.
-frontend/        React + TypeScript + Vite + MapLibre GL JS + Tailwind CSS.
-data-pipeline/   One-off Node scripts that fetch + clip + simplify the raw datasets into
-                 backend/data-cache/processed/, which the backend loads at startup.
-\```
+```
+backend/         Spring Boot 4.1 (Java 21), Maven. Serves GeoJSON + entity info over REST. <br>
+frontend/        React + TypeScript + Vite + MapLibre GL JS + Tailwind CSS. <br>
+data-pipeline/   One-off Node scripts that fetch + clip + simplify the raw datasets into <br>
+                 backend/data-cache/processed/, which the backend loads at startup. <br>
+```
