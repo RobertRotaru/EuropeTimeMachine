@@ -20,5 +20,5 @@ frontend/.env.local
 .idea/
 *.iml
 
-# Claude Code local settings (machine-specific, not part of the app)
+# Local tool settings (machine-specific, not part of the app)
 .claude/
